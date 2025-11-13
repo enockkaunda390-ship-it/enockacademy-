@@ -28,15 +28,27 @@ iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:no
 .video-controls { text-align:right; }
 .video-controls button { background:#0078ff; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; margin-top:5px; }
 .video-controls button:hover { background:#005fd1; }
+#blocked-overlay {
+  position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85);
+  color: white; display:flex; flex-direction: column; justify-content: center;
+  align-items: center; z-index:9999; text-align: center; padding: 20px; font-size: 1.2em;
+}
+#blocked-overlay button { margin-top:20px; padding:10px 20px; font-size:1em; background:#1976d2; border:none; border-radius:8px; cursor:pointer; color:white; }
 @media (max-width: 500px) { .container { margin:10px; width:calc(100% - 20px); } }
 </style>
 </head>
 <body>
 
+<!-- BLOCKED OVERLAY -->
+<div id="blocked-overlay" class="hidden">
+  <h2>Access Denied!</h2>
+  <p>Your account is disabled. To continue accessing content, please make payment or contact the Admin:</p>
+  <p style="font-weight:bold; font-size:1.3em;">📞 0768037965</p>
+  <button onclick="contactAdmin()">Contact Admin</button>
+</div>
+
 <!-- AUTH FORMS -->
 <div class="container" id="auth-container">
-
-  <!-- SIGN UP -->
   <div id="signup-div">
     <h2>Sign Up</h2>
     <input type="text" id="signup-name" placeholder="Full Name"><br>
@@ -49,10 +61,8 @@ iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:no
       </a>
     </div>
     <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
-    <p id="error-signup" style="color:red;"></p>
   </div>
 
-  <!-- LOGIN -->
   <div id="login-div" class="hidden">
     <h2>Login</h2>
     <input type="email" id="login-email" placeholder="Email"><br>
@@ -64,9 +74,7 @@ iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:no
       </a>
     </div>
     <p>Don't have an account? <a href="#" onclick="showSignUp()">Sign Up</a></p>
-    <p id="error-login" style="color:red;"></p>
   </div>
-
 </div>
 
 <!-- DASHBOARD -->
@@ -115,19 +123,14 @@ const subjectVideos = document.getElementById('subject-videos');
 const subjectTitle = document.getElementById('subject-title');
 const videosContainer = document.getElementById('videos-container');
 const searchInput = document.getElementById('search-input');
-
-// ===== VIDEO DATA =====
-const videosData = {
-  math: { grade10:{ term1:[ {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"} ], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
-  chemistry:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
-  biology:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
-  physics:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } }
-};
+const blockedOverlay = document.getElementById('blocked-overlay');
 
 // ===== UTILS =====
 function isDisabled(email){ return disabledUsers.includes(email); }
 function findUser(email){ return users.find(u=>u.email===email); }
 function saveUsers(){ localStorage.setItem('users', JSON.stringify(users)); }
+function blockUser(){ blockedOverlay.classList.remove('hidden'); authContainer.classList.add('hidden'); dashboard.classList.add('hidden'); subjectVideos.classList.add('hidden'); }
+function contactAdmin(){ window.open('https://wa.me/260768037965', '_blank'); }
 
 // ===== SHOW FORMS =====
 function showLogin(){ signupDiv.classList.add('hidden'); loginDiv.classList.remove('hidden'); authContainer.classList.remove('hidden'); }
@@ -139,9 +142,8 @@ function signUp(){
   const email=document.getElementById('signup-email').value.trim();
   const password=document.getElementById('signup-password').value.trim();
   if(!name||!email||!password){ alert("All fields required"); return; }
-  if(isDisabled(email)){ alert("Please make payment or contact Admin (0768037965)."); return; }
+  if(isDisabled(email)){ blockUser(); return; }
   if(findUser(email)){ alert("User already exists. Please login."); showLogin(); return; }
-
   const newUser={name,email,password,signupDate:Date.now()};
   users.push(newUser); saveUsers();
   currentUser=newUser;
@@ -154,11 +156,9 @@ function login(){
   const email=document.getElementById('login-email').value.trim();
   const password=document.getElementById('login-password').value.trim();
   if(!email||!password){ alert("Both fields required"); return; }
-  if(isDisabled(email)){ alert("Please make payment or contact Admin (0768037965)."); return; }
-
+  if(isDisabled(email)){ blockUser(); return; }
   const user=findUser(email);
   if(!user||user.password!==password){ alert("Invalid email or password"); return; }
-
   currentUser=user;
   sessionStorage.setItem('user', JSON.stringify(currentUser));
   showDashboard();
@@ -168,12 +168,7 @@ function login(){
 window.addEventListener('DOMContentLoaded', ()=>{
   const userData=JSON.parse(sessionStorage.getItem('user'));
   if(userData){
-    if(isDisabled(userData.email)){ 
-      alert("Please make payment or contact Admin (0768037965)"); 
-      sessionStorage.removeItem('user'); 
-      showLogin(); 
-      return; 
-    }
+    if(isDisabled(userData.email)){ blockUser(); return; }
     currentUser=userData;
     showDashboard();
   } else { showLogin(); }
@@ -186,7 +181,6 @@ function showDashboard(){
   const diffDays=Math.floor((today-signupDate)/(1000*60*60*24));
   const remainingDays=Math.max(0,30-diffDays);
   if(remainingDays===0){ alert("Your trial ended. Please contact Admin 0768037965."); logout(); return; }
-
   welcomeName.textContent=`Welcome, ${currentUser.name}!`;
   remainingDaysMsg.textContent=`You have ${remainingDays} day(s) left of access.`;
   authContainer.classList.add('hidden'); dashboard.classList.remove('hidden');
