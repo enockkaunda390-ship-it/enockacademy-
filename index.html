@@ -14,19 +14,27 @@ button:hover { background:#0288d1; transform:scale(1.03); }
 .nav-btn { display:inline-block; margin:10px 5px; padding:15px 20px; background:#1976d2; color:white; border-radius:10px; cursor:pointer; text-decoration:none; width:calc(50% - 20px); box-sizing:border-box; font-weight:bold; text-align:center; transition:0.3s; }
 .nav-btn:hover { background:#0288d1; transform:scale(1.03); }
 h2,h3 { margin-top:20px; color:#333; }
-.video-card { background:#fff; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.08); padding:10px; margin-bottom:12px; display:flex; flex-direction:column; gap:10px; }
-.video-card h3 { margin:0; font-size:16px; }
 #videos-container { max-height:50vh; overflow-y:auto; background:#f9f9f9; border-radius:0 0 12px 12px; padding:10px; margin-top:5px; }
 .search-bar { width:calc(100% - 20px); padding:10px; margin:10px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
 .back { display:inline-block; padding:10px 20px; background:#1976d2; color:white; border-radius:8px; text-decoration:none; cursor:pointer; font-weight:bold; margin:10px; }
 .back:hover { background:#0288d1; transform:scale(1.03); }
 #top-bar { position:sticky; top:0; background:#fff; z-index:15; padding:10px; border-bottom:1px solid #ccc; box-shadow:0 2px 5px rgba(0,0,0,0.05); border-radius:12px 12px 0 0; display:flex; flex-direction:column; align-items:center; }
-iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:none; }
+iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:none; display:block; }
 #remaining-days { font-size:0.9em; color:#555; margin-top:5px; }
+.video-card { background:#fff; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.08); padding:10px; margin-bottom:12px; display:flex; flex-direction:column; gap:10px; width:100%; box-sizing:border-box; }
+.video-card h3 { margin:0; font-size:16px; }
+.video-card img { width:100%; max-width:100%; height:auto; border-radius:8px; cursor:pointer; display:block; }
 .video-controls { text-align:right; }
 .video-controls button { background:#0078ff; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; margin-top:5px; }
 .video-controls button:hover { background:#005fd1; }
-img { width:100%; border-radius:8px; cursor:pointer; }
+
+/* Responsive container for small screens */
+@media (max-width: 500px) {
+  .container {
+    margin: 10px;
+    width: calc(100% - 20px);
+  }
+}
 </style>
 </head>
 <body>
@@ -73,7 +81,6 @@ img { width:100%; border-radius:8px; cursor:pointer; }
     <a class="back" onclick="back()">Back</a>
     <input type="text" id="search-input" class="search-bar" placeholder="Search videos...">
   </div>
-
   <div id="videos-container"></div>
 </div>
 
@@ -83,10 +90,8 @@ const videosData = {
   math: {
     grade10: {
       term1: [
-        { title:"Empty", src:"https://drive.google.com/file/d/1lzgQm7yQ4dRsEIHyLpVeOKr5fI7sG3yq/preview", thumb:"thumbnails/subtraction.jpg" },
-        { title:"Empty file", src:"https://drive.google.com/file/d/1WAwXhu7sEor6Q3sTmvkoV3BPO4YeeMUY/preview", thumb:"thumbnails/addition.jpg" },
-         { title:"Empty file", src:"https://drive.google.com/file/d/1WAwXhu7sEor6Q3sTmvkoV3BPO4YeeMUY/preview", thumb:"thumbnails/addition.jpg" },
-            { title:"Empty file", src:"https://drive.google.com/file/d/1WAwXhu7sEor6Q3sTmvkoV3BPO4YeeMUY/preview", thumb:"thumbnails/addition.jpg" },  
+        { title:"Subtraction", src:"https://drive.google.com/file/d/1lzgQm7yQ4dRsEIHyLpVeOKr5fI7sG3yq/preview", thumb:"thumbnails/subtraction.jpg" },
+        { title:"Addition", src:"https://drive.google.com/file/d/1WAwXhu7sEor6Q3sTmvkoV3BPO4YeeMUY/preview", thumb:"thumbnails/addition.jpg" }
       ],
       term2: [],
       term3: []
