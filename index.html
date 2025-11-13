@@ -98,7 +98,7 @@ iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:no
 const disabledUsers = ["blocked@example.com","testdisabled@email.com"];
 
 // ===== GLOBALS =====
-let currentUser=null, currentSubject=null, currentGrade=null, currentTerm=null, currentVideos=[], loadedCount=0, batchSize=10;
+let currentUser = null, currentSubject2=null, currentGrade2=null, currentTerm2=null, currentVideos=[], loadedCount=0, batchSize=10, filteredVideos=[];
 const signupDiv=document.getElementById('signup-div');
 const loginDiv=document.getElementById('login-div');
 const authContainer=document.getElementById('auth-container');
@@ -113,152 +113,148 @@ const searchInput=document.getElementById('search-input');
 // ===== VIDEO DATA =====
 const videosData = {
   math: { grade10:{ term1:[ {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"},
-{title:"2023_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"}    ], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
+     {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"}], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
   chemistry:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
   biology:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
   physics:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } }
 };
 
-// ===== AUTH =====
+// ===== HELPER =====
+function isDisabled(email){ return disabledUsers.includes(email); }
+
+// ===== INITIAL CHECK =====
 window.addEventListener('DOMContentLoaded', ()=>{
-  const userData = JSON.parse(localStorage.getItem('user'));
-  if(userData){ 
-    currentUser=userData; 
-    if(disabledUsers.includes(userData.email)) { 
-      alert("Please make payment or contact Admin (0768037965)"); 
-      logout(); 
-    } else { showDashboard(); } 
-  }
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if(userData){
+        if(isDisabled(userData.email)){
+            alert("Your account is disabled. Please make payment or contact Admin (0768037965)");
+            logout();
+        } else {
+            currentUser = userData;
+            showDashboard();
+        }
+    }
 });
 
+// ===== SHOW LOGIN / SIGNUP =====
 function showLogin(){ signupDiv.classList.add('hidden'); loginDiv.classList.remove('hidden'); }
 function showSignUp(){ loginDiv.classList.add('hidden'); signupDiv.classList.remove('hidden'); }
 
+// ===== SIGN UP =====
 function signUp(){
-  const name=document.getElementById('signup-name').value.trim();
-  const email=document.getElementById('signup-email').value.trim();
-  if(!name || !email){ alert("Enter your name and email"); return; }
-  if(disabledUsers.includes(email)) { alert("Please make payment or contact Admin (0768037965)"); return; }
-  const signupDate=Date.now();
-  localStorage.setItem('user',JSON.stringify({name,email,signupDate}));
-  currentUser={name,email,signupDate};
-  showDashboard();
+    const name=document.getElementById('signup-name').value.trim();
+    const email=document.getElementById('signup-email').value.trim();
+    if(!name || !email){ alert("Enter your name and email"); return; }
+    if(isDisabled(email)){ alert("Your account is disabled. Please contact Admin (0768037965)"); return; }
+    const signupDate=Date.now();
+    currentUser={name,email,signupDate};
+    localStorage.setItem('user',JSON.stringify(currentUser));
+    showDashboard();
 }
 
+// ===== LOGIN =====
 function login(){
-  const email=document.getElementById('login-email').value.trim();
-  const userData=JSON.parse(localStorage.getItem('user'));
-  if(!userData){ alert("No user found! Sign up first."); return; }
-  if(disabledUsers.includes(email)) { alert("Please make payment or contact Admin (0768037965)"); return; }
-  currentUser=userData;
-  showDashboard();
+    const emailInput=document.getElementById('login-email').value.trim();
+    const userData=JSON.parse(localStorage.getItem('user'));
+    if(!userData){ alert("No user found! Sign up first."); return; }
+    if(isDisabled(userData.email)){ alert("Your account is disabled. Please contact Admin (0768037965)"); logout(); return; }
+    if(emailInput!==userData.email){ alert("Email does not match our records."); return; }
+    currentUser=userData;
+    showDashboard();
 }
 
+// ===== DASHBOARD =====
 function showDashboard(){
-  const signupDate=new Date(currentUser.signupDate);
-  const today=new Date();
-  const diffDays=Math.floor((today-signupDate)/(1000*60*60*24));
-  const remainingDays=Math.max(0,30-diffDays);
-  welcomeName.textContent=`Welcome, ${currentUser.name}!`;
-  remainingDaysMsg.textContent=`You have ${remainingDays} day(s) remaining of access.`;
-  authContainer.classList.add('hidden');
-  dashboard.classList.remove('hidden');
-  if(remainingDays<=5 && remainingDays>0) alert(`Hurry! Only ${remainingDays} day(s) left in your trial. Please contact Admin.`);
-  if(remainingDays===0) { alert("Your trial has ended. Please make payment or contact Admin."); logout(); }
+    const signupDate=new Date(currentUser.signupDate);
+    const today=new Date();
+    const diffDays=Math.floor((today-signupDate)/(1000*60*60*24));
+    const remainingDays=Math.max(0,30-diffDays);
+    if(remainingDays===0){ alert("Your trial has ended. Please contact Admin."); logout(); return; }
+    welcomeName.textContent=`Welcome, ${currentUser.name}!`;
+    remainingDaysMsg.textContent=`You have ${remainingDays} day(s) remaining of access.`;
+    authContainer.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    if(remainingDays<=5){ alert(`Hurry! Only ${remainingDays} day(s) left in your trial.`); }
 }
 
+// ===== LOGOUT =====
 function logout(){ localStorage.removeItem('user'); location.reload(); }
 
 // ===== NAVIGATION =====
-let currentSubject2=null, currentGrade2=null, currentTerm2=null;
-
 function back(){
-  searchInput.value="";
-  if(currentTerm2){ currentTerm2=null; showTerms(currentGrade2);} 
-  else if(currentGrade2){ currentGrade2=null; showGrades(currentSubject2);} 
-  else { subjectVideos.classList.add('hidden'); dashboard.classList.remove('hidden'); }
+    searchInput.value="";
+    if(currentTerm2){ currentTerm2=null; showTerms(currentGrade2);} 
+    else if(currentGrade2){ currentGrade2=null; showGrades(currentSubject2);} 
+    else { subjectVideos.classList.add('hidden'); dashboard.classList.remove('hidden'); }
 }
 
 function showGrades(subject){
-  resetVideos();
-  currentSubject2=subject; currentGrade2=currentTerm2=null;
-  videosContainer.innerHTML="";
-  Object.keys(videosData[subject]).forEach(grade=>{
-    const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=grade.toUpperCase();
-    btn.onclick=()=>{ showTerms(grade); };
-    videosContainer.appendChild(btn);
-  });
-  dashboard.classList.add('hidden');
-  subjectVideos.classList.remove('hidden');
-  subjectTitle.textContent=subject.toUpperCase();
+    resetVideos();
+    currentSubject2=subject; currentGrade2=currentTerm2=null;
+    videosContainer.innerHTML="";
+    Object.keys(videosData[subject]).forEach(grade=>{
+        const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=grade.toUpperCase();
+        btn.onclick=()=>{ showTerms(grade); };
+        videosContainer.appendChild(btn);
+    });
+    dashboard.classList.add('hidden');
+    subjectVideos.classList.remove('hidden');
+    subjectTitle.textContent=subject.toUpperCase();
 }
 
 function showTerms(grade){
-  resetVideos();
-  currentGrade2=grade; currentTerm2=null;
-  videosContainer.innerHTML="";
-  Object.keys(videosData[currentSubject2][grade]).forEach(term=>{
-    const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=term.toUpperCase();
-    btn.onclick=()=>{ showVideos(term); };
-    videosContainer.appendChild(btn);
-  });
+    resetVideos();
+    currentGrade2=grade; currentTerm2=null;
+    videosContainer.innerHTML="";
+    Object.keys(videosData[currentSubject2][grade]).forEach(term=>{
+        const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=term.toUpperCase();
+        btn.onclick=()=>{ showVideos(term); };
+        videosContainer.appendChild(btn);
+    });
 }
 
 function showVideos(term){
-  resetVideos();
-  currentTerm2=term;
-  currentVideos=videosData[currentSubject2][currentGrade2][term];
-  renderNextBatch();
+    resetVideos();
+    currentTerm2=term;
+    currentVideos=videosData[currentSubject2][currentGrade2][term];
+    renderNextBatch();
 }
 
-// ===== NO-DUPLICATE RENDER =====
-let filteredVideos = [];
+// ===== VIDEO RENDERING =====
+function resetVideos(){ videosContainer.innerHTML=""; currentVideos=[]; filteredVideos=[]; loadedCount=0; }
 
-function resetVideos(){
-  videosContainer.innerHTML="";
-  currentVideos=[];
-  filteredVideos=[];
-  loadedCount=0;
+function renderNextBatch(list=currentVideos){
+    const nextBatch=list.slice(loadedCount, loadedCount+batchSize);
+    nextBatch.forEach(v=>{
+        const card=document.createElement('div'); card.className='video-card';
+        const title=document.createElement('h3'); title.textContent=v.title;
+        const img=document.createElement('img'); img.src=v.thumb;
+        const iframe=document.createElement('iframe'); iframe.src=v.src; iframe.allow="autoplay; encrypted-media"; iframe.allowFullscreen=true; iframe.style.display="none";
+        img.addEventListener('click', ()=>{ img.style.display="none"; iframe.style.display="block"; });
+        const controls=document.createElement('div'); controls.className='video-controls';
+        const btn=document.createElement('button'); btn.textContent="⬇️ Download"; 
+        btn.onclick=()=>{ const fileId=v.src.match(/\/d\/(.*?)\//)[1]; const link=document.createElement('a'); link.href=`https://drive.google.com/uc?export=download&id=${fileId}`; link.download=''; link.click(); };
+        controls.appendChild(btn);
+        card.appendChild(title); card.appendChild(img); card.appendChild(iframe); card.appendChild(controls);
+        videosContainer.appendChild(card);
+    });
+    loadedCount+=nextBatch.length;
 }
 
-function renderNextBatch(list = currentVideos){
-  const nextBatch = list.slice(loadedCount, loadedCount + batchSize);
-  nextBatch.forEach(v => {
-    const card=document.createElement('div'); card.className='video-card';
-    const title=document.createElement('h3'); title.textContent=v.title;
-    const img=document.createElement('img'); img.src=v.thumb;
-    const iframe=document.createElement('iframe'); iframe.src=v.src; iframe.allow="autoplay; encrypted-media"; iframe.allowFullscreen=true; iframe.style.display="none";
-    img.addEventListener('click', ()=>{ img.style.display="none"; iframe.style.display="block"; });
-    const controls=document.createElement('div'); controls.className='video-controls';
-    const btn=document.createElement('button'); btn.textContent="⬇️ Download"; 
-    btn.onclick=()=>{ const fileId = v.src.match(/\/d\/(.*?)\//)[1]; const link=document.createElement('a'); link.href=`https://drive.google.com/uc?export=download&id=${fileId}`; link.download=''; link.click(); };
-    controls.appendChild(btn);
-    card.appendChild(title); card.appendChild(img); card.appendChild(iframe); card.appendChild(controls);
-    videosContainer.appendChild(card);
-  });
-  loadedCount += nextBatch.length;
-}
-
-// Scroll loader (one-time setup)
-videosContainer.onscroll = ()=>{
-  const list = filteredVideos.length ? filteredVideos : currentVideos;
-  if(videosContainer.scrollTop + videosContainer.clientHeight >= videosContainer.scrollHeight - 5){
-    if(loadedCount < list.length){ renderNextBatch(list); }
-  }
+// ===== SCROLL & SEARCH =====
+videosContainer.onscroll=()=>{
+    const list=filteredVideos.length ? filteredVideos : currentVideos;
+    if(videosContainer.scrollTop + videosContainer.clientHeight >= videosContainer.scrollHeight - 5){
+        if(loadedCount < list.length) renderNextBatch(list);
+    }
 };
 
-// Search bar filter
-searchInput.oninput = ()=>{
-  const query = searchInput.value.toLowerCase();
-  videosContainer.innerHTML="";
-  loadedCount=0;
-  if(!query){
-    filteredVideos=[];
-    renderNextBatch(currentVideos);
-  } else {
-    filteredVideos=currentVideos.filter(v => v.title.toLowerCase().includes(query));
-    renderNextBatch(filteredVideos);
-  }
+searchInput.oninput=()=>{
+    const query=searchInput.value.toLowerCase();
+    videosContainer.innerHTML="";
+    loadedCount=0;
+    if(!query){ filteredVideos=[]; renderNextBatch(currentVideos); }
+    else { filteredVideos=currentVideos.filter(v=>v.title.toLowerCase().includes(query)); renderNextBatch(filteredVideos); }
 };
 </script>
 </body>
