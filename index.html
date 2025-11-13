@@ -95,10 +95,10 @@ iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:no
 
 <script>
 // ===== DISABLED USERS =====
-const disabledUsers = ["blocked@example.com","testdisabled@email.com"]; 
+const disabledUsers = ["blocked@example.com","testdisabled@email.com"]; // Add emails of disabled users here
 
 // ===== GLOBALS =====
-let currentUser=null, currentSubject=null, currentGrade=null, currentTerm=null, currentVideos=[], currentVideosOriginal=[], loadedCount=0, batchSize=10;
+let currentUser=null, currentSubject=null, currentGrade=null, currentTerm=null, currentVideos=[], loadedCount=0, batchSize=10;
 const signupDiv=document.getElementById('signup-div');
 const loginDiv=document.getElementById('login-div');
 const authContainer=document.getElementById('auth-container');
@@ -110,13 +110,9 @@ const subjectTitle=document.getElementById('subject-title');
 const videosContainer=document.getElementById('videos-container');
 const searchInput=document.getElementById('search-input');
 
-// ===== VIDEO DATA =====
+// ===== VIDEO DATA (same as before) =====
 const videosData = {
-  math: { grade10:{ term1:[ {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"},
- {title:"Coming Soon...", src:"", thumb:"thumbnails/subtraction.jpg"},
- {title:"Coming Soon...", src:"", thumb:"thumbnails/subtraction.jpg"},
- {title:"Coming Soon...", src:"", thumb:"thumbnails/subtraction.jpg"}    
-      ], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
+  math: { grade10:{ term1:[ {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"} ], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
   chemistry:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
   biology:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
   physics:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } }
@@ -172,7 +168,7 @@ function showDashboard(){
 
 function logout(){ localStorage.removeItem('user'); location.reload(); }
 
-// ===== NAVIGATION / VIDEO FUNCTIONS =====
+// ===== NAVIGATION / VIDEO FUNCTIONS same as before =====
 let currentSubject2=null, currentGrade2=null, currentTerm2=null;
 
 function back(){
@@ -204,10 +200,8 @@ function showTerms(grade){
 
 function showVideos(term){
   currentTerm2=term;
-  currentVideosOriginal = videosData[currentSubject2][currentGrade2][term]; // Keep original
-  currentVideos = [...currentVideosOriginal];
-  loadedCount = 0;
-  videosContainer.innerHTML = "";
+  currentVideos=videosData[currentSubject2][currentGrade2][term];
+  videosContainer.innerHTML=""; loadedCount=0;
   renderNextBatch();
 }
 
@@ -235,11 +229,10 @@ videosContainer.addEventListener('scroll', ()=>{
 });
 
 searchInput.addEventListener('input', ()=>{
-  const query = searchInput.value.toLowerCase();
-  const filtered = currentVideosOriginal.filter(v => v.title.toLowerCase().includes(query));
-  currentVideos = [...filtered];
-  loadedCount = 0;
-  videosContainer.innerHTML = "";
+  const query=searchInput.value.toLowerCase();
+  const filtered=currentVideos.filter(v=>v.title.toLowerCase().includes(query));
+  videosContainer.innerHTML=""; loadedCount=0;
+  currentVideos=filtered;
   renderNextBatch();
 });
 </script>
