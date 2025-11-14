@@ -1,250 +1,259 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Learn With Enock - Video Template</title>  
-<style>  
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f5f7fa; }  
-.container { max-width:500px; margin:20px auto; background:white; padding:20px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }  
-input[type="text"], input[type="email"], input[type="password"] { width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }  
-button { padding:12px 20px; border:none; background:#1976d2; color:white; border-radius:8px; cursor:pointer; margin:5px 0; font-weight:bold; transition:0.3s; }  
-button:hover { background:#0288d1; transform:scale(1.03); }  
-.hidden { display:none; }  
-.nav-btn { display:inline-block; margin:10px 5px; padding:15px 20px; background:#1976d2; color:white; border-radius:10px; cursor:pointer; text-decoration:none; width:calc(50% - 20px); box-sizing:border-box; font-weight:bold; text-align:center; transition:0.3s; }  
-.nav-btn:hover { background:#0288d1; transform:scale(1.03); }  
-h2,h3 { margin-top:20px; color:#333; }  
-#videos-container { max-height:50vh; overflow-y:auto; background:#f9f9f9; border-radius:0 0 12px 12px; padding:10px; margin-top:5px; }  
-.search-bar { width:calc(100% - 20px); padding:10px; margin:10px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }  
-.back { display:inline-block; padding:10px 20px; background:#1976d2; color:white; border-radius:8px; text-decoration:none; cursor:pointer; font-weight:bold; margin:10px; }  
-.back:hover { background:#0288d1; transform:scale(1.03); }  
-#top-bar { position:sticky; top:0; background:#fff; z-index:15; padding:10px; border-bottom:1px solid #ccc; box-shadow:0 2px 5px rgba(0,0,0,0.05); border-radius:12px 12px 0 0; display:flex; flex-direction:column; align-items:center; }  
-iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:none; display:block; }  
-#remaining-days { font-size:0.9em; color:#555; margin-top:5px; }  
-.video-card { background:#fff; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.08); padding:10px; margin-bottom:12px; display:flex; flex-direction:column; gap:10px; width:100%; box-sizing:border-box; }  
-.video-card h3 { margin:0; font-size:16px; }  
-.video-card img { width:100%; max-width:100%; height:auto; border-radius:8px; cursor:pointer; display:block; }  
-.video-controls { text-align:right; }  
-.video-controls button { background:#0078ff; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; margin-top:5px; }  
-.video-controls button:hover { background:#005fd1; }  
-@media (max-width: 500px) { .container { margin:10px; width:calc(100% - 20px); } }  
-</style>  
-</head>  
-<body>  <!-- Sign Up / Login -->  <div class="container" id="auth-container">  
-  <div id="signup-div">  
-    <h2>Sign Up</h2>  
-    <input type="text" id="signup-name" placeholder="Full Name"><br>  
-    <input type="email" id="signup-email" placeholder="Email"><br>  
-    <input type="password" id="signup-password" placeholder="Password"><br>  
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">  
-      <button onclick="signUp()" style="flex:1; margin-right:10px;">Sign Up</button>  
-      <a href="https://wa.me/260768037965" target="_blank">  
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:36px; height:36px;">  
-      </a>  
-    </div>  
-    <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>  
-    <p id="error" style="color:red;"></p>  
-  </div>    <div id="login-div" class="hidden">  
-    <h2>Login</h2>  
-    <input type="email" id="login-email" placeholder="Email"><br>  
-    <input type="password" id="login-password" placeholder="Password"><br>  
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">  
-      <button onclick="login()" style="flex:1; margin-right:10px;">Login</button>  
-      <a href="https://wa.me/260768037965" target="_blank">  
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:36px; height:36px;">  
-      </a>  
-    </div>  
-    <p>Don't have an account? <a href="#" onclick="showSignUp()">Sign Up</a></p>  
-    <p id="error-login" style="color:red;"></p>  
-  </div>  
-</div>  <!-- Dashboard -->  <div class="container hidden" id="dashboard">  
-<h1>Enock Academy</h1>  
-<h2 id="welcome-name"></h2>  
-<p id="remaining-days"></p>  
-<div id="subjects">  
-  <a class="nav-btn" onclick="showGrades('math')">Math</a>  
-  <a class="nav-btn" onclick="showGrades('chemistry')">Chemistry</a>  
-  <a class="nav-btn" onclick="showGrades('biology')">Biology</a>  
-  <a class="nav-btn" onclick="showGrades('physics')">Physics</a>  
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">  
-    <button onclick="logout()" style="padding:8px 12px; font-size:14px;">Logout</button>  
-    <a href="https://wa.me/260768037965" target="_blank">  
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:36px; height:36px;">  
-    </a>  
-  </div>  
-</div>  
-</div>  <!-- Subject Videos -->  <div class="container hidden" id="subject-videos">  
-<h2 id="subject-title"></h2>  
-<div id="top-bar">  
-  <a class="back" onclick="back()">Back</a>  
-  <input type="text" id="search-input" class="search-bar" placeholder="Search videos...">  
-</div>  
-<div id="videos-container"></div>  
-</div>  <script>  
-// ===== DISABLED USERS =====  
-const disabledUsers = ["blocked@example.com","testdisabled@email.com"];  
-  
-// ===== GLOBALS =====  
-let currentUser=null, currentSubject=null, currentGrade=null, currentTerm=null, currentVideos=[], loadedCount=0, batchSize=10;  
-const signupDiv=document.getElementById('signup-div');  
-const loginDiv=document.getElementById('login-div');  
-const authContainer=document.getElementById('auth-container');  
-const dashboard=document.getElementById('dashboard');  
-const welcomeName=document.getElementById('welcome-name');  
-const remainingDaysMsg=document.getElementById('remaining-days');  
-const subjectVideos=document.getElementById('subject-videos');  
-const subjectTitle=document.getElementById('subject-title');  
-const videosContainer=document.getElementById('videos-container');  
-const searchInput=document.getElementById('search-input');  
-  
-// ===== VIDEO DATA =====  
-const videosData = {  
-  math: { grade10:{ term1:[ {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"},  
-{title:"2023_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"}    ], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },  
-  chemistry:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },  
-  biology:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },  
-  physics:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } }  
-};  
-  
-// ===== AUTH =====  
-window.addEventListener('DOMContentLoaded', ()=>{  
-  const userData = JSON.parse(localStorage.getItem('user'));  
-  if(userData){   
-    currentUser=userData;   
-    if(disabledUsers.includes(userData.email)) {   
-      alert("Please make payment or contact Admin (0768037965)");   
-      logout();   
-    } else { showDashboard(); }   
-  }  
-});  
-  
-function showLogin(){ signupDiv.classList.add('hidden'); loginDiv.classList.remove('hidden'); }  
-function showSignUp(){ loginDiv.classList.add('hidden'); signupDiv.classList.remove('hidden'); }  
-  
-function signUp(){  
-  const name=document.getElementById('signup-name').value.trim();  
-  const email=document.getElementById('signup-email').value.trim();  
-  if(!name || !email){ alert("Enter your name and email"); return; }  
-  if(disabledUsers.includes(email)) { alert("Please make payment or contact Admin (0768037965)"); return; }  
-  const signupDate=Date.now();  
-  localStorage.setItem('user',JSON.stringify({name,email,signupDate}));  
-  currentUser={name,email,signupDate};  
-  showDashboard();  
-}  
-  
-function login(){  
-  const email=document.getElementById('login-email').value.trim();  
-  const userData=JSON.parse(localStorage.getItem('user'));  
-  if(!userData){ alert("No user found! Sign up first."); return; }  
-  if(disabledUsers.includes(email)) { alert("Please make payment or contact Admin (0768037965)"); return; }  
-  currentUser=userData;  
-  showDashboard();  
-}  
-  
-function showDashboard(){  
-  const signupDate=new Date(currentUser.signupDate);  
-  const today=new Date();  
-  const diffDays=Math.floor((today-signupDate)/(1000*60*60*24));  
-  const remainingDays=Math.max(0,30-diffDays);  
-  welcomeName.textContent=`Welcome, ${currentUser.name}!`;  
-  remainingDaysMsg.textContent=`You have ${remainingDays} day(s) remaining of access.`;  
-  authContainer.classList.add('hidden');  
-  dashboard.classList.remove('hidden');  
-  if(remainingDays<=5 && remainingDays>0) alert(`Hurry! Only ${remainingDays} day(s) left in your trial. Please contact Admin.`);  
-  if(remainingDays===0) { alert("Your trial has ended. Please make payment or contact Admin."); logout(); }  
-}  
-  
-function logout(){ localStorage.removeItem('user'); location.reload(); }  
-  
-// ===== NAVIGATION =====  
-let currentSubject2=null, currentGrade2=null, currentTerm2=null;  
-  
-function back(){  
-  searchInput.value="";  
-  if(currentTerm2){ currentTerm2=null; showTerms(currentGrade2);}   
-  else if(currentGrade2){ currentGrade2=null; showGrades(currentSubject2);}   
-  else { subjectVideos.classList.add('hidden'); dashboard.classList.remove('hidden'); }  
-}  
-  
-function showGrades(subject){  
-  resetVideos();  
-  currentSubject2=subject; currentGrade2=currentTerm2=null;  
-  videosContainer.innerHTML="";  
-  Object.keys(videosData[subject]).forEach(grade=>{  
-    const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=grade.toUpperCase();  
-    btn.onclick=()=>{ showTerms(grade); };  
-    videosContainer.appendChild(btn);  
-  });  
-  dashboard.classList.add('hidden');  
-  subjectVideos.classList.remove('hidden');  
-  subjectTitle.textContent=subject.toUpperCase();  
-}  
-  
-function showTerms(grade){  
-  resetVideos();  
-  currentGrade2=grade; currentTerm2=null;  
-  videosContainer.innerHTML="";  
-  Object.keys(videosData[currentSubject2][grade]).forEach(term=>{  
-    const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=term.toUpperCase();  
-    btn.onclick=()=>{ showVideos(term); };  
-    videosContainer.appendChild(btn);  
-  });  
-}  
-  
-function showVideos(term){  
-  resetVideos();  
-  currentTerm2=term;  
-  currentVideos=videosData[currentSubject2][currentGrade2][term];  
-  renderNextBatch();  
-}  
-  
-// ===== NO-DUPLICATE RENDER =====  
-let filteredVideos = [];  
-  
-function resetVideos(){  
-  videosContainer.innerHTML="";  
-  currentVideos=[];  
-  filteredVideos=[];  
-  loadedCount=0;  
-}  
-  
-function renderNextBatch(list = currentVideos){  
-  const nextBatch = list.slice(loadedCount, loadedCount + batchSize);  
-  nextBatch.forEach(v => {  
-    const card=document.createElement('div'); card.className='video-card';  
-    const title=document.createElement('h3'); title.textContent=v.title;  
-    const img=document.createElement('img'); img.src=v.thumb;  
-    const iframe=document.createElement('iframe'); iframe.src=v.src; iframe.allow="autoplay; encrypted-media"; iframe.allowFullscreen=true; iframe.style.display="none";  
-    img.addEventListener('click', ()=>{ img.style.display="none"; iframe.style.display="block"; });  
-    const controls=document.createElement('div'); controls.className='video-controls';  
-    const btn=document.createElement('button'); btn.textContent="⬇️ Download";   
-    btn.onclick=()=>{ const fileId = v.src.match(/\/d\/(.*?)\//)[1]; const link=document.createElement('a'); link.href=`https://drive.google.com/uc?export=download&id=${fileId}`; link.download=''; link.click(); };  
-    controls.appendChild(btn);  
-    card.appendChild(title); card.appendChild(img); card.appendChild(iframe); card.appendChild(controls);  
-    videosContainer.appendChild(card);  
-  });  
-  loadedCount += nextBatch.length;  
-}  
-  
-// Scroll loader (one-time setup)  
-videosContainer.onscroll = ()=>{  
-  const list = filteredVideos.length ? filteredVideos : currentVideos;  
-  if(videosContainer.scrollTop + videosContainer.clientHeight >= videosContainer.scrollHeight - 5){  
-    if(loadedCount < list.length){ renderNextBatch(list); }  
-  }  
-};  
-  
-// Search bar filter  
-searchInput.oninput = ()=>{  
-  const query = searchInput.value.toLowerCase();  
-  videosContainer.innerHTML="";  
-  loadedCount=0;  
-  if(!query){  
-    filteredVideos=[];  
-    renderNextBatch(currentVideos);  
-  } else {  
-    filteredVideos=currentVideos.filter(v => v.title.toLowerCase().includes(query));  
-    renderNextBatch(filteredVideos);  
-  }  
-};  
-</script>  </body>  
-</html>   
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enock Academy</title>
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; background:#f5f7fa; }
+.container { max-width:500px; margin:20px auto; background:white; padding:20px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+input[type="text"], input[type="email"], input[type="password"] { width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
+button { padding:12px 20px; border:none; background:#1976d2; color:white; border-radius:8px; cursor:pointer; margin:5px 0; font-weight:bold; transition:0.3s; }
+button:hover { background:#0288d1; transform:scale(1.03); }
+.hidden { display:none; }
+.nav-btn { display:inline-block; margin:10px 5px; padding:15px 20px; background:#1976d2; color:white; border-radius:10px; cursor:pointer; text-decoration:none; width:calc(50% - 20px); box-sizing:border-box; font-weight:bold; text-align:center; transition:0.3s; }
+.nav-btn:hover { background:#0288d1; transform:scale(1.03); }
+h2,h3 { margin-top:20px; color:#333; }
+#videos-container { max-height:50vh; overflow-y:auto; background:#f9f9f9; border-radius:0 0 12px 12px; padding:10px; margin-top:5px; }
+.search-bar { width:calc(100% - 20px); padding:10px; margin:10px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
+.back { display:inline-block; padding:10px 20px; background:#1976d2; color:white; border-radius:8px; text-decoration:none; cursor:pointer; font-weight:bold; margin:10px; }
+.back:hover { background:#0288d1; transform:scale(1.03); }
+#top-bar { position:sticky; top:0; background:#fff; z-index:15; padding:10px; border-bottom:1px solid #ccc; box-shadow:0 2px 5px rgba(0,0,0,0.05); border-radius:12px 12px 0 0; display:flex; flex-direction:column; align-items:center; }
+iframe { width:100%; border-radius:10px; margin-top:5px; height:250px; border:none; display:block; }
+#remaining-days { font-size:0.9em; color:#555; margin-top:5px; }
+.video-card { background:#fff; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.08); padding:10px; margin-bottom:12px; display:flex; flex-direction:column; gap:10px; width:100%; box-sizing:border-box; }
+.video-card h3 { margin:0; font-size:16px; }
+.video-card img { width:100%; max-width:100%; height:auto; border-radius:8px; cursor:pointer; display:block; }
+.video-controls { text-align:right; }
+.video-controls button { background:#0078ff; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; margin-top:5px; }
+.video-controls button:hover { background:#005fd1; }
+@media (max-width: 500px) { .container { margin:10px; width:calc(100% - 20px); } }
+</style>
+</head>
+<body>
+
+<!-- Sign Up / Login -->
+<div class="container" id="auth-container">
+  <div id="signup-div">
+    <h2>Sign Up</h2>
+    <input type="text" id="signup-name" placeholder="Full Name">
+    <input type="email" id="signup-email" placeholder="Email">
+    <input type="password" id="signup-password" placeholder="Password">
+    <button id="signup-btn" type="button">Sign Up</button>
+    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+  </div>
+
+  <div id="login-div" class="hidden">
+    <h2>Login</h2>
+    <input type="email" id="login-email" placeholder="Email">
+    <input type="password" id="login-password" placeholder="Password">
+    <button id="login-btn" type="button">Login</button>
+    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="container hidden" id="dashboard">
+<h1>Enock Academy</h1>
+<h2 id="welcome-name"></h2>
+<p id="remaining-days"></p>
+<div id="subjects"></div>
+<button id="logout-btn" type="button">Logout</button>
+</div>
+
+<!-- Subject Videos -->
+<div class="container hidden" id="subject-videos">
+<h2 id="subject-title"></h2>
+<div id="top-bar">
+  <a class="back" id="back-btn">Back</a>
+  <input type="text" id="search-input" class="search-bar" placeholder="Search videos...">
+</div>
+<div id="videos-container"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = { 
+  apiKey: "AIzaSyAazQb4Oz3iLOLEb7MBHuAI9BaFENdASkw",
+  authDomain: "secondary-center.firebaseapp.com",
+  projectId: "secondary-center",
+  storageBucket: "secondary-center.appspot.com",
+  messagingSenderId: "1019887514683",
+  appId: "1:1019887514683:web:6e6af64676f653c28e181e",
+  measurementId: "G-PLXF010P8Z"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ===== Elements =====
+const signupDiv = document.getElementById('signup-div');
+const loginDiv = document.getElementById('login-div');
+const authContainer = document.getElementById('auth-container');
+const dashboard = document.getElementById('dashboard');
+const welcomeName = document.getElementById('welcome-name');
+const remainingDaysMsg = document.getElementById('remaining-days');
+const subjectsDiv = document.getElementById('subjects');
+const subjectVideos = document.getElementById('subject-videos');
+const subjectTitle = document.getElementById('subject-title');
+const videosContainer = document.getElementById('videos-container');
+const searchInput = document.getElementById('search-input');
+const backBtn = document.getElementById('back-btn');
+
+let currentSubject2 = null, currentGrade2 = null, currentTerm2 = null;
+let currentVideos = [], loadedCount = 0, batchSize = 10, filteredVideos = [];
+
+// ===== Video Data =====
+const videosData = {
+  math: { grade10:{ term1:[ {title:"2024_Speed Time Graph", src:"https://drive.google.com/file/d/1neehFWNbJm4zkjjHDrR8KXyqN9_FE7KQ/preview", thumb:"thumbnails/subtraction.jpg"}], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
+  chemistry:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
+  biology:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } },
+  physics:{ grade10:{ term1:[], term2:[], term3:[] }, grade11:{ term1:[], term2:[], term3:[] }, grade12:{ term1:[], term2:[], term3:[] } }
+};
+
+// ===== Show login/signup =====
+document.getElementById('show-login').onclick = ()=>{ signupDiv.classList.add('hidden'); loginDiv.classList.remove('hidden'); }
+document.getElementById('show-signup').onclick = ()=>{ loginDiv.classList.add('hidden'); signupDiv.classList.remove('hidden'); }
+
+// ===== Sign Up =====
+document.getElementById('signup-btn').onclick = async ()=>{
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value.trim();
+  if(!name || !email || !password){ alert("Fill all fields"); return; }
+
+  try{
+    const methods = await fetchSignInMethodsForEmail(auth,email);
+    if(methods.length > 0){ alert("Email exists! Login instead."); return; }
+
+    await createUserWithEmailAndPassword(auth,email,password);
+    await setDoc(doc(db,"users",email),{name,email,signupDate:Date.now(),disabled:false});
+    alert("Signup successful!");
+  }catch(e){ alert("Error: "+e.message); }
+}
+
+// ===== Login =====
+document.getElementById('login-btn').onclick = async ()=>{
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+  try{ await signInWithEmailAndPassword(auth,email,password); } 
+  catch(e){ alert(e.message); }
+}
+
+// ===== Logout =====
+document.getElementById('logout-btn').onclick = ()=> signOut(auth).then(()=>location.reload());
+
+// ===== Auth State =====
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    const userDoc = await getDoc(doc(db,"users",user.email));
+    if(!userDoc.exists()){
+      alert("No account record found. Contact admin.");
+      await signOut(auth); return;
+    }
+    const data = userDoc.data();
+    if(data.disabled){ alert("Account disabled. Contact admin."); await signOut(auth); return; }
+
+    authContainer.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    welcomeName.textContent = `Welcome, ${data.name}!`;
+    const diffDays = Math.floor((new Date()-new Date(data.signupDate))/(1000*60*60*24));
+    remainingDaysMsg.textContent = `Trial: ${Math.max(0,30-diffDays)} day(s) left`;
+
+    renderSubjects();
+  }
+});
+
+// ===== Real-time Users Logging =====
+onSnapshot(collection(db,"users"), snapshot=>{
+  snapshot.docChanges().forEach(change=>{
+    if(change.type==='added') console.log("New user:", change.doc.data());
+  });
+});
+
+// ===== Subjects =====
+function renderSubjects(){
+  subjectsDiv.innerHTML="";
+  Object.keys(videosData).forEach(sub=>{
+    const btn = document.createElement('div'); btn.className='nav-btn'; btn.textContent=sub.toUpperCase();
+    btn.onclick=()=>showGrades(sub);
+    subjectsDiv.appendChild(btn);
+  });
+}
+
+// ===== Navigation =====
+backBtn.onclick = ()=>{
+  searchInput.value="";
+  if(currentTerm2){ currentTerm2=null; showTerms(currentGrade2);}
+  else if(currentGrade2){ currentGrade2=null; showGrades(currentSubject2);}
+  else{ subjectVideos.classList.add('hidden'); dashboard.classList.remove('hidden'); }
+}
+
+// ===== Grades/Terms/Videos =====
+function showGrades(subject){
+  currentSubject2=subject; currentGrade2=currentTerm2=null;
+  renderOptions(Object.keys(videosData[subject]), showTerms, subjectTitle, subject.toUpperCase());
+}
+
+function showTerms(grade){
+  currentGrade2=grade; currentTerm2=null;
+  renderOptions(Object.keys(videosData[currentSubject2][grade]), showVideos, subjectTitle, `${currentSubject2.toUpperCase()} - ${grade.toUpperCase()}`);
+}
+
+function showVideos(term){
+  currentTerm2=term;
+  currentVideos=videosData[currentSubject2][currentGrade2][term];
+  videosContainer.innerHTML=""; loadedCount=0; filteredVideos=[];
+  renderNextBatch();
+}
+
+function renderOptions(list, clickFn, titleEl, titleText){
+  videosContainer.innerHTML="";
+  titleEl.textContent = titleText;
+  dashboard.classList.add('hidden'); subjectVideos.classList.remove('hidden');
+  list.forEach(item=>{
+    const btn=document.createElement('div'); btn.className='nav-btn'; btn.textContent=item.toUpperCase(); btn.onclick=()=>clickFn(item);
+    videosContainer.appendChild(btn);
+  });
+}
+
+// ===== Video Render =====
+function renderNextBatch(list=currentVideos){
+  const nextBatch = list.slice(loadedCount, loadedCount+batchSize);
+  nextBatch.forEach(v=>{
+    const card = document.createElement('div'); card.className='video-card';
+    const title = document.createElement('h3'); title.textContent=v.title;
+    const img = document.createElement('img'); img.src=v.thumb;
+    const iframe = document.createElement('iframe'); iframe.src=v.src; iframe.allow="autoplay; encrypted-media"; iframe.allowFullscreen=true; iframe.style.display="none";
+    img.onclick = ()=>{ img.style.display="none"; iframe.style.display="block"; };
+    const controls = document.createElement('div'); controls.className='video-controls';
+    const btn = document.createElement('button'); btn.textContent="⬇️ Download";
+    btn.onclick = ()=>{ const id = v.src.match(/\/d\/(.*?)\//)[1]; const link=document.createElement('a'); link.href=`https://drive.google.com/uc?export=download&id=${id}`; link.click(); };
+    controls.appendChild(btn);
+    card.append(title,img,iframe,controls); videosContainer.appendChild(card);
+  });
+  loadedCount += nextBatch.length;
+}
+
+// ===== Scroll loader =====
+videosContainer.onscroll = ()=>{
+  const list = filteredVideos.length?filteredVideos:currentVideos;
+  if(videosContainer.scrollTop + videosContainer.clientHeight >= videosContainer.scrollHeight-5){
+    if(loadedCount<list.length) renderNextBatch(list);
+  }
+}
+
+// ===== Search =====
+searchInput.oninput = ()=>{
+  const query = searchInput.value.toLowerCase();
+  videosContainer.innerHTML=""; loadedCount=0;
+  if(!query){ filteredVideos=[]; renderNextBatch(); }
+  else{ filteredVideos = currentVideos.filter(v=>v.title.toLowerCase().includes(query)); renderNextBatch(filteredVideos); }
+}
+</script>
+</body>
+</html>
