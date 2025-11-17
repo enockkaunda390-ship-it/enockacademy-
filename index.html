@@ -133,10 +133,21 @@ let currentVideos=[], loadedCount=0, batchSize=10, filteredVideos=[];
 
 // Video Data (placeholders)
 const videosData = {
-  math:{ grade10:{ term1:[{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"},
-{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"},
-{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"},
-{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"}], term2:[{title:"Coming Soon", src:"h", thumb:"thumbnails/subtraction.jpg"}], term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}] }, grade11:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade12:{term1:[{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"S", src:"h", thumb:"thumbnails/subtraction.jpg"}]}},
+  math:{ grade10:{ term1:[{title:"NUMBERS", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"POWER AND INDICES", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"SET THEORY", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}], term2:[{title:"ALGEBRA", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"RELATION AND FUNCTIONS", src:"h", thumb:"thumbnails/subtraction.jpg"}], term3:[{title:"QUADRATIC FUNCTIONS", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"VARIATIONS", src:"h", thumb:"thumbnails/subtraction.jpg"}] }, grade11:{term1:[{title:"MATRICES", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"VECTORS IN TWO DIMENSIONS", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"CO-ODINATE GEOMETRY", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"LINEAR PROGRAMMING", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"ANGEL GEOMETRY", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"TRIGONOMETRY", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade12:{term1:[{title:"MENSURATION", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"EARTH GEOMETRY", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"CONSTRUCTION AND LOCI", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"SEQUENCE", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"STATISTICS", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"KINEMATICS", src:"h", thumb:"thumbnails/subtraction.jpg"},
+{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"PROBABILITY", src:"h", thumb:"thumbnails/subtraction.jpg"},
+COMMERCIAL & SOCAL ARITHMETIC]}},
   physics:{ grade10:{term1:[{title:"PHYSICAL QUANTITIES, MEASUREMENTS AND UNITS", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade11:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade12:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}},
   chemistry:{ grade10:{term1:[{title:"S", src:"Coming Soon...", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade11:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade12:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}},
   biology:{ grade10:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade11:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}, grade12:{term1:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term2:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}],term3:[{title:"Coming Soon...", src:"h", thumb:"thumbnails/subtraction.jpg"}]}}
